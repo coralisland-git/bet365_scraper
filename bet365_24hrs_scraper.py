@@ -142,75 +142,77 @@ def parse_market_odd(league_title, start_time, market_list):
 
             for odd in odd_list:         
 
-                # try:
+                try:
 
-                odd.click()
+                    odd.click()
 
-                time.sleep(3)
+                    time.sleep(3)
 
-                # switch driver into iframe object
-                driver.switch_to.frame(driver.find_element_by_tag_name("iframe"))
+                    # switch driver into iframe object
+                    driver.switch_to.frame(driver.find_element_by_tag_name("iframe"))
 
-                output = []
+                    output = []
 
-                odd_element = driver.find_elements_by_xpath('//li[contains(@class, "bs-Item bs-SingleItem")]')[-1]
+                    odd_element = driver.find_elements_by_xpath('//li[contains(@class, "bs-Item bs-SingleItem")]')[-1]
 
-                # BetSlipID
-                bet_slip_id = odd_element.get_attribute('data-item-fpid')
-                
-                # MarketID
-                market_id = odd_element.get_attribute('data-fixtureid')
+                    # BetSlipID
+                    bet_slip_id = odd_element.get_attribute('data-item-fpid')
+                    
+                    # MarketID
+                    market_id = odd_element.get_attribute('data-fixtureid')
 
-                details = (driver.find_elements_by_xpath('//div[@class="bs-SelectionRow"]')[-1].text.split('\n'))
+                    details = (driver.find_elements_by_xpath('//div[@class="bs-SelectionRow"]')[-1].text.split('\n'))
 
-                # details[1] : market
+                    # details[1] : market
 
-                # details[2] : teams
+                    # details[2] : teams
 
-                updated_at = validate(int(time.mktime(datetime.datetime.utcnow().timetuple())))
+                    updated_at = validate(int(time.mktime(datetime.datetime.utcnow().timetuple())))
 
-                team_list = details[2].split(' v ')
+                    team_list = details[2].split(' v ')
 
-                home = team_list[0]
+                    home = team_list[0]
 
-                away = team_list[1]
+                    away = team_list[1]
 
-                check_query = "select * from %s where bet_slip_id='%s'" %(table_name, bet_slip_id)
+                    check_query = "select * from %s where bet_slip_id='%s'" %(table_name, bet_slip_id)
 
-                count = cur.execute(check_query)
+                    count = cur.execute(check_query)
 
-                db.cursor()
+                    db.cursor()
 
-                if count == 0:
+                    if count == 0:
 
-                    sql = "INSERT INTO " + table_name
+                        sql = "INSERT INTO " + table_name
 
-                    sql += "(market_id, sport_id, start_time, time_status, league, teams, home, away, ss, market, bet_slip_id, updated_at) "
+                        sql += "(market_id, sport_id, start_time, time_status, league, teams, home, away, ss, market, bet_slip_id, updated_at) "
 
-                    sql += "VALUES ('%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s'); " %(market_id, "1", start_time, "0", league_title, details[2], home, away, 'null', details[1], bet_slip_id, updated_at)
+                        sql += "VALUES ('%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s'); " %(market_id, "1", start_time, "0", league_title, details[2], home, away, 'null', details[1], bet_slip_id, updated_at)
 
-                else:
+                    else:
 
-                    sql = "UPDATE %s SET market_id='%s', sport_id='%s', start_time='%s', time_status='%s', teams='%s', league='%s', home='%s', away='%s', ss='%s', market='%s', bet_slip_id='%s', updated_at='%s'  WHERE bet_slip_id='%s'"
+                        sql = "UPDATE %s SET market_id='%s', sport_id='%s', start_time='%s', time_status='%s', teams='%s', league='%s', home='%s', away='%s', ss='%s', market='%s', bet_slip_id='%s', updated_at='%s'  WHERE bet_slip_id='%s'"
 
-                    sql = sql %(table_name, market_id, "1", start_time, "0", details[2], league_title, home, away, 'null', details[1], bet_slip_id, updated_at, bet_slip_id)
+                        sql = sql %(table_name, market_id, "1", start_time, "0", details[2], league_title, home, away, 'null', details[1], bet_slip_id, updated_at, bet_slip_id)
 
-                print(sql)
+                    print(sql)
 
-                cur.execute(sql)
+                    cur.execute(sql)
 
-                db.commit()
+                    db.commit()
 
-                # switch driver back to root object.
-                driver.switch_to.default_content()
+                    # switch driver back to root object.
+                    driver.switch_to.default_content()
 
-                odd.click()
+                    odd.click()
 
-                time.sleep(2)
+                    time.sleep(3)
 
-                # except Exception as e:
+                except Exception as e:
 
-                #     pdb.set_trace()
+                    driver.switch_to.default_content()
+
+                    break
 
 
 def fetch_data():
@@ -293,7 +295,7 @@ def fetch_data():
 
                     pass
 
-                time.sleep(2)
+                time.sleep(3)
 
                 section_list = driver.find_elements_by_xpath('//div[contains(@class, "gll-MarketGroup ufm-MarketGroupUpcomingCompetition")]')
 
@@ -319,7 +321,7 @@ def fetch_data():
 
                     pass
 
-                time.sleep(2)
+                time.sleep(3)
 
                 league_title = validate(driver.find_element_by_xpath('//div[contains(@class, "cl-BreadcrumbTrail_BreadcrumbTruncate")]').text)
 
@@ -363,7 +365,7 @@ def fetch_data():
 
                         pass
 
-                    time.sleep(2)
+                    time.sleep(3)
 
                     sub_market_list = driver.find_elements_by_xpath('//div[contains(@class, "gl-MarketGrid")]/div[contains(@class, "gll-MarketGroup")]')
 
