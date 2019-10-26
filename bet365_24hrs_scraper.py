@@ -313,7 +313,9 @@ def fetch_data():
 
                 try:
 
-                    market_list_container = WebDriverWait(driver, delay_time).until(EC.presence_of_element_located((By.XPATH, '//div[contains(@class, "gl-MarketGrid")]/div[contains(@class, "gll-MarketGroup")]')))
+                    WebDriverWait(driver, delay_time).until(EC.presence_of_element_located((By.XPATH, '//div[contains(@class, "gl-MarketGrid")]/div[contains(@class, "gll-MarketGroup")]')))
+
+                    WebDriverWait(driver, delay_time).until(EC.presence_of_element_located((By.XPATH, '//div[contains(@class, "BreadcrumbTrail_BreadcrumbTruncate")]')))                    
                     
                 except:
 
