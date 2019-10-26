@@ -219,7 +219,7 @@ def fetch_data():
 
     try:
 
-        delay_time = 15
+        delay_time = 20
 
         # start with 
         driver.get(base_url)
