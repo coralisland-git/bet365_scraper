@@ -54,7 +54,7 @@ driver = webdriver.Chrome('./chromedriver', options=options)
 # init url of bet website.
 base_url = 'https://www.bet365.com'
 
-db = MySQLdb.connect(host="localhost", user="root", passwd="root", db="bet365_db")       
+db = MySQLdb.connect(host="localhost", user="ubuntu", passwd="root", db="bet365_db")       
 
 cur = db.cursor()
 
